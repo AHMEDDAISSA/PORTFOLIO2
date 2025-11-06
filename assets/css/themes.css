@@ -1,0 +1,47 @@
+/* ================================
+   VARIABLES & ROOT STYLES
+================================ */
+:root {
+    --primary: #667eea;
+    --primary-dark: #5a67d8;
+    --secondary: #764ba2;
+    --accent: #f093fb;
+    --accent-secondary: #f5576c;
+    --tertiary: #4facfe;
+    --tertiary-light: #00f2fe;
+    --success: #43e97b;
+    --success-light: #38f9d7;
+    --warm: #fa709a;
+    --warm-light: #fee140;
+    --cool: #a8edea;
+    --cool-light: #fed6e3;
+}
+
+/* ================================
+   THEME SYSTEM
+================================ */
+body.dark {
+    background: linear-gradient(135deg, #0a0e27 0%, #151b3d 100%);
+    color: #ffffff;
+    --bg-primary: rgba(10, 14, 39, 0.95);
+    --bg-secondary: rgba(21, 27, 61, 0.95);
+    --bg-tertiary: rgba(30, 39, 73, 0.95);
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --card-shadow: rgba(0, 0, 0, 0.3);
+}
+
+body.light {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: #1a202c;
+    --bg-primary: rgba(255, 255, 255, 0.95);
+    --bg-secondary: rgba(248, 250, 252, 0.95);
+    --bg-tertiary: rgba(241, 245, 249, 0.95);
+    --text-primary: #1a202c;
+    --text-secondary: #2d3748;
+    --text-muted: #718096;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --card-shadow: rgba(0, 0, 0, 0.1);
+}

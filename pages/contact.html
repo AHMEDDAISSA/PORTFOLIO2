@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - AHMED AISSA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/themes.css">
+    
+    <style>
+        /* Resume Modal Styles */
+        .resume-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .resume-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .resume-modal-content {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            max-width: 900px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .resume-modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .resume-viewer {
+            width: 100%;
+            height: calc(100% - 70px);
+            border: none;
+        }
+        
+        /* Enhanced button styles */
+        .resume-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .resume-btn-download {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .resume-btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .resume-btn-view {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .resume-btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 400px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .notification i {
+            font-size: 1.5rem;
+        }
+        
+        @media (max-width: 640px) {
+            .resume-modal-content {
+                width: 95%;
+                height: 95%;
+            }
+
+            .notification {
+                max-width: calc(100% - 40px);
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="dark" id="body">
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-indicator" id="scrollProgress"></div>
+
+    <!-- Enhanced Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon text-2xl" id="themeIcon" style="color: var(--text-primary);"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-dynamic backdrop-blur-lg border-b border-dynamic">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                 <div class="text-2xl font-bold gradient-text-primary font-playfair">
+                <a href="../index.html">
+                    <span style="font-style: italic; font-family: 'Playfair Display', serif;">AHMED AISSA</span>
+                </a>
+            </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="about.html" class="text-dynamic hover:text-blue-400 transition-colors">About</a>
+                    <a href="skills.html" class="text-dynamic hover:text-blue-400 transition-colors">Skills</a>
+                    <a href="projects.html" class="text-dynamic hover:text-blue-400 transition-colors">Projects</a>
+                    <a href="contact.html" class="text-blue-400 font-semibold">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Enhanced Contact Section -->
+    <section id="contact" class="py-24 relative min-h-screen pt-32">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-5xl md:text-6xl font-bold text-center mb-20 gradient-text-primary font-playfair" 
+                data-aos="fade-up">
+                Get In Touch
+            </h2>
+            
+            <div class="grid lg:grid-cols-2 gap-16">
+                <div data-aos="fade-right">
+                    <h3 class="text-3xl font-bold mb-8 text-dynamic font-poppins">
+                        Let's Create Something Amazing
+                    </h3>
+                    <p class="text-dynamic-muted mb-8 text-lg leading-relaxed">
+                        Ready to transform your ideas into reality? Whether you have a groundbreaking concept, 
+                        need technical consultation, or want to discuss the latest in web development, 
+                        I'd love to connect with you.
+                    </p>
+                    
+                    <div class="space-y-6 mb-10">
+                        <div class="flex items-center group">
+                            <div class="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mr-4 transition-transform group-hover:scale-110">
+                                <i class="fas fa-envelope text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-dynamic font-semibold">Email</p>
+                                <p class="text-dynamic-muted">aisssaahmed9@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center group">
+                            <div class="w-16 h-16 gradient-accent rounded-2xl flex items-center justify-center mr-4 transition-transform group-hover:scale-110">
+                                <i class="fas fa-phone text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-dynamic font-semibold">Phone</p>
+                                <p class="text-dynamic-muted">+216 96 339 287</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Resume Download & View Section -->
+                        <div class="flex items-center group">
+                            <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-4 transition-transform group-hover:scale-110">
+                                <i class="fas fa-file-pdf text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-dynamic font-semibold mb-2">Resume</p>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <a href="../assets/resume n1.pdf" 
+                                       download="Ahmed_Aissa_Resume.pdf" 
+                                       class="resume-btn resume-btn-download">
+                                        <i class="fas fa-download mr-2"></i>
+                                        Download PDF
+                                    </a>
+                                    <button onclick="openResumeModal()" 
+                                            class="resume-btn resume-btn-view">
+                                        <i class="fas fa-eye mr-2"></i>
+                                        View 
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div data-aos="fade-left">
+                    <div class="bg-dynamic-secondary backdrop-blur-lg border border-dynamic rounded-3xl p-8 card-3d">
+                        <!-- FORMSPREE FORM -->
+                        <form id="contactForm" action="https://formspree.io/f/mzzknaqq" method="POST" class="space-y-6">
+                            <div class="form-group">
+                                <input type="text" name="name" class="form-input" placeholder=" " required>
+                                <label class="form-label">Your Name</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="email" name="email" class="form-input" placeholder=" " required>
+                                <label class="form-label">Email Address</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="text" name="subject" class="form-input" placeholder=" " required>
+                                <label class="form-label">Subject</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <textarea name="message" class="form-input" rows="5" placeholder=" " required></textarea>
+                                <label class="form-label">Message</label>
+                            </div>
+                            
+                            <!-- Honeypot field for spam protection -->
+                            <input type="text" name="_gotcha" style="display:none">
+                            
+                            <button type="submit" class="w-full liquid-btn gradient-primary text-white py-4 rounded-2xl font-bold text-lg">
+                                <span id="submitText">
+                                    <i class="fas fa-paper-plane mr-2"></i>Send Message
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation to other sections -->
+            <div class="text-center mt-20">
+                <div class="flex flex-wrap justify-center gap-8">
+                    <a href="../index.html" class="liquid-btn gradient-accent text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-400 transform hover:scale-110">
+                        <i class="fas fa-home mr-2"></i>Back to Home
+                    </a>
+                    <a href="projects.html" class="liquid-btn border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-400 transform hover:scale-110">
+                        <i class="fas fa-briefcase mr-2"></i>View Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Modal -->
+    <div id="resumeModal" class="resume-modal">
+        <div class="resume-modal-content">
+            <div class="resume-modal-header">
+                <h3 class="text-xl font-bold">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Ahmed Aissa - Resume
+                </h3>
+                <button class="close-modal" onclick="closeResumeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <iframe id="resumeViewer" class="resume-viewer" src=""></iframe>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer -->
+    <footer class="py-16 bg-dynamic backdrop-blur-lg border-t border-dynamic">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <div class="mb-8">
+                <h3 class="text-3xl font-bold gradient-text-primary font-playfair mb-2">Ahmed Aissa</h3>
+                <p class="text-dynamic-muted">Full Stack Developer</p>
+            </div>
+            
+            <!-- Footer Social Icons -->
+            <div class="footer-social-icons">
+                <a href="https://www.linkedin.com/in/ahmed-aissa-ba7b75293/" target="_blank" 
+                   class="footer-social-icon social-linkedin" title="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/AHMEDDAISSA" target="_blank" 
+                   class="footer-social-icon social-github" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:aisssaahmed9@gmail.com" 
+                   class="footer-social-icon social-email" title="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+
+            <p class="text-dynamic-muted mb-4">
+                © 2025 Ahmed Aissa. Crafted with <i class="fas fa-heart text-red-500 mx-1 animate-pulse"></i> and passion.
+            </p>
+            <p class="text-dynamic-muted text-sm">
+                Built with modern technologies • Optimized for performance • Designed for impact
+            </p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/animations.js"></script>
+    <script src="../assets/js/components.js"></script>
+    
+    <script>
+        // Resume Modal Functions
+        function openResumeModal() {
+            const modal = document.getElementById('resumeModal');
+            const viewer = document.getElementById('resumeViewer');
+            
+            viewer.src = '../assets/resume n1.pdf';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.transition = 'opacity 0.3s ease';
+                modal.style.opacity = '1';
+            }, 10);
+        }
+        
+        function closeResumeModal() {
+            const modal = document.getElementById('resumeModal');
+            const viewer = document.getElementById('resumeViewer');
+            
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.classList.remove('active');
+                viewer.src = '';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+        
+        document.getElementById('resumeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeResumeModal();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeResumeModal();
+            }
+        });
+        
+        document.getElementById('resumeViewer').addEventListener('error', function() {
+            alert('Sorry, there was an error loading the resume. Please try downloading it instead.');
+            closeResumeModal();
+        });
+
+        // Enhanced Formspree Form Handling
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const submitText = document.getElementById('submitText');
+            const originalText = submitText.innerHTML;
+            
+            // Disable button and show loading state
+            submitText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.7';
+            
+            try {
+                const formData = new FormData(form);
+                
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Success
+                    submitText.innerHTML = '<i class="fas fa-check mr-2"></i>Message Sent!';
+                    submitBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    
+                    // Reset form
+                    form.reset();
+                    
+                    // Show success notification
+                    showNotification('Thank you! Your message has been sent successfully. I\'ll get back to you soon!', 'success');
+                    
+                } else {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Failed to send message');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                submitText.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i>Error';
+                submitBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+                
+                showNotification(error.message || 'Oops! There was an error sending your message. Please try again.', 'error');
+            }
+            
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                submitText.innerHTML = originalText;
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.background = '';
+            }, 3000);
+        });
+
+        // Notification Function
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification with animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
