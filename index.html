@@ -9,9 +9,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/styles.css">
+<link rel="stylesheet" href="./assets/css/themes.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="./assets/js/theme.js"></script>
 
     <style>
         :root {
@@ -25,6 +28,7 @@
             --accent-red: #ef4444;
             --shadow-color: rgba(59, 130, 246, 0.3);
         }
+        
 
         body {
             font-family: 'Inter', sans-serif;
@@ -53,29 +57,7 @@
             transition: width 0.25s ease;
         }
 
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 0.2);
-        }
+       
 
         /* Enhanced Navigation */
         .bg-dynamic {
@@ -495,7 +477,7 @@
     <div class="scroll-indicator" id="scrollProgress"></div>
 
     <!-- Enhanced Theme Toggle -->
-    <button class="theme-toggle" id="themeToggle">
+   <button class="theme-toggle" id="themeToggle">
         <i class="fas fa-moon text-2xl" id="themeIcon" style="color: var(--text-primary);"></i>
     </button>
 
@@ -603,7 +585,7 @@
     <script>
         // Initialize AOS
         AOS.init({
-            duration: 1000,
+            duration: 1000, 
             once: true,
             offset: 100
         });
@@ -613,18 +595,41 @@
         const body = document.getElementById('body');
         const themeIcon = document.getElementById('themeIcon');
 
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('light');
-            body.classList.toggle('dark');
-            
-            if (body.classList.contains('light')) {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        });
+        function setTheme(theme) {
+    if (theme === 'light') {
+        body.classList.remove('dark');
+        body.classList.add('light');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    } else {
+        body.classList.remove('light');
+        body.classList.add('dark');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+    }
+    // Save theme to localStorage
+    localStorage.setItem('theme', theme);
+}
+
+// Load theme on page load
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+}
+
+// Toggle theme on button click
+themeToggle.addEventListener('click', () => {
+    const currentTheme = body.classList.contains('light') ? 'light' : 'dark';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+});
+
+// Load theme when page loads
+loadTheme();
+
+
+
+       
 
         // Scroll Progress
         window.addEventListener('scroll', () => {

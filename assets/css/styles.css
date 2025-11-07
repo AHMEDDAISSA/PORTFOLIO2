@@ -771,30 +771,48 @@ body.light .glitch-text {
         width: 250px;
         height: 250px;
     }
-
+    
+    /* Theme toggle repositionné en bas à droite sur mobile */
     .theme-toggle {
-        width: 50px;
-        height: 50px;
-        top: 1rem;
-        right: 1rem;
+        width: 55px;
+        height: 55px;
+        top: auto;              /* Annule le positionnement top */
+        bottom: 2rem;           /* Position depuis le bas */
+        right: 1.5rem;          /* Un peu d'espace du bord droit */
+        z-index: 1000;          /* Au-dessus du contenu */
     }
-
+    
     .social-icons {
         gap: 1.5rem;
     }
-
+    
     .social-icon {
         width: 50px;
         height: 50px;
         font-size: 1.25rem;
     }
-
+    
     .project-image-container {
         height: 200px;
     }
-
+    
     .project-card:hover {
         transform: translateY(-10px);
+    }
+    
+    #mobileMenuBtn {
+        position: relative;
+        z-index: 60;
+    }
+}
+
+/* Pour les très petits écrans */
+@media (max-width: 480px) {
+    .theme-toggle {
+        width: 50px;
+        height: 50px;
+        bottom: 1.5rem;
+        right: 1rem;
     }
 }
 
@@ -815,18 +833,5 @@ body.light .glitch-text {
     .floating-element {
         display: none !important;
     }
-    #mobileMenuBtn {
-    position: relative;
-    z-index: 60;
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .theme-toggle {
-        top: 5rem; /* Move theme toggle below navbar */
-        width: 50px;
-        height: 50px;
-    }
-}
 }
 
