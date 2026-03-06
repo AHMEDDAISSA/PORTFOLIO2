@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skills & Technologies - AHMED AISSA</title>
-    <link rel="icon" href="../assets//images/letter-a.png">
+    <link rel="icon" href="../assets/images/letter-a.png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -15,12 +16,16 @@
     <script src="../assets/js/theme.js"></script>
     <link rel="stylesheet" href="../assets/css/styles.css">
     <link rel="stylesheet" href="../assets/css/themes.css">
-</head>
+    </head>
 <body class="dark" id="body">
+
     <!-- Scroll Progress Indicator -->
     <div class="scroll-indicator" id="scrollProgress"></div>
 
-    <!-- Enhanced Theme Toggle -->
+    <!-- Floating particles -->
+    <div class="skills-particles" id="particles"></div>
+
+    <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle">
         <i class="fas fa-moon text-2xl" id="themeIcon" style="color: var(--text-primary);"></i>
     </button>
@@ -30,14 +35,13 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="text-2xl font-bold gradient-text-primary font-playfair">
-                <a href="../index.html">
-        
-                 <span style="font-style: italic; font-family: 'Playfair Display', serif;">AHMED AISSA</span>
-                </a>
+                    <a href="../index.html">
+                        <span style="font-style: italic; font-family: 'Playfair Display', serif;">AHMED AISSA</span>
+                    </a>
                 </div>
                 <div class="hidden md:flex space-x-8">
-                    <a href="about.html" class="text-dynamic hover:text-blue-400 transition-colors">About</a>
-                    <a href="skills.html" class="text-blue-400 font-semibold">Skills</a>
+                    <a href="about.html"   class="text-dynamic hover:text-blue-400 transition-colors">About</a>
+                    <a href="skills.html"  class="text-blue-400 font-semibold">Skills</a>
                     <a href="projects.html" class="text-dynamic hover:text-blue-400 transition-colors">Projects</a>
                     <a href="contact.html" class="text-dynamic hover:text-blue-400 transition-colors">Contact</a>
                 </div>
@@ -45,164 +49,344 @@
         </div>
     </nav>
 
-    <!-- Enhanced Skills Section -->
+    <!-- ===== SKILLS SECTION ===== -->
     <section id="skills" class="py-24 relative min-h-screen pt-32">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-5xl md:text-6xl font-bold text-center mb-20 gradient-text-primary font-playfair" 
-                data-aos="fade-up">
-                Skills & Technologies
-            </h2>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-50">
-                <div class="bg-dynamic-secondary backdrop-blur-lg border border-dynamic rounded-3xl p-12 card-3d" 
-                     data-aos="zoom-in" data-aos-delay="100">
-                    <div class="flex items-center mb-8">
-                        <div class="w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center mr-4">
-                            <i class="fas fa-laptop-code text-white text-xl"></i>
-                        </div>
-                        <h3 class="text-3xl font-semibold text-dynamic font-poppins">Frontend</h3>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">HTML/CSS</span>
-                                <span class="text-dynamic-secondary font-bold">100%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="100"></div>
-                            </div>
-                        </div>
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
 
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">React.js</span>
-                                <span class="text-dynamic-secondary font-bold">95%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="95"></div>
-                            </div>
-                        </div>
-
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">React Native</span>
-                                <span class="text-dynamic-secondary font-bold">91%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="91"></div>
-                            </div>
-                        </div>
-
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">TypeScript</span>
-                                <span class="text-dynamic-secondary font-bold">80%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="92"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-dynamic-secondary backdrop-blur-lg border border-dynamic rounded-3xl p-12 card-3d" 
-                     data-aos="zoom-in" data-aos-delay="200">
-                    <div class="flex items-center mb-8">
-                        <div class="w-14 h-14 gradient-accent rounded-2xl flex items-center justify-center mr-4">
-                            <i class="fas fa-server text-white text-xl"></i>
-                        </div>
-                        <h3 class="text-3xl font-semibold text-dynamic font-poppins">Backend</h3>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">Node.js</span>
-                                <span class="text-dynamic-secondary font-bold">90%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="90"></div>
-                            </div>
-                        </div>
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">PHP</span>
-                                <span class="text-dynamic-secondary font-bold">88%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="88"></div>
-                            </div>
-                        </div>
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">Laravel</span>
-                                <span class="text-dynamic-secondary font-bold">85%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="85"></div>
-                            </div>
-                        </div>
-
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">Symfony</span>
-                                <span class="text-dynamic-secondary font-bold">80%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="85"></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="bg-dynamic-secondary backdrop-blur-lg border border-dynamic rounded-3xl p-12 card-3d" 
-                     data-aos="zoom-in" data-aos-delay="300">
-                    <div class="flex items-center mb-8">
-                        <div class="w-14 h-14 gradient-tertiary rounded-2xl flex items-center justify-center mr-4">
-                            <i class="fas fa-database text-white text-xl"></i>
-                        </div>
-                        <h3 class="text-3xl font-semibold text-dynamic font-poppins">Database & Tools</h3>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">MongoDB</span>
-                                <span class="text-dynamic-secondary font-bold">90%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="90"></div>
-                            </div>
-                        </div>
-                        <div class="skill-container">
-                            <div class="flex justify-between mb-3">
-                                <span class="text-dynamic-secondary font-medium">MySQL </span>
-                                <span class="text-dynamic-secondary font-bold">87%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-skill="87"></div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
+            <!-- Title -->
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-5xl md:text-6xl font-bold gradient-text-primary font-playfair mb-4">
+                    Skills & Technologies
+                </h2>
+                <p class="text-lg" style="color: var(--text-secondary, #94a3b8); font-family: 'Inter', sans-serif; max-width: 480px; margin: 0 auto;">
+                    Technologies I work with to build modern, scalable applications
+                </p>
             </div>
 
-            <!-- Navigation to other sections -->
-            <div class="text-center mt-20">
+            <!-- 3-column categories grid -->
+            <div class="skills-main-grid">
+
+                <!-- ===== FRONTEND ===== -->
+                <div class="skills-category-wrapper cat-frontend" data-aos="fade-up" data-aos-delay="100">
+                    <span class="category-badge badge-frontend">
+                        <i class="fas fa-layer-group" style="font-size:0.6rem;"></i> Frontend
+                    </span>
+                    <div class="skills-section-title">
+                        <div class="skills-section-icon" style="background: linear-gradient(135deg,#6366f1,#8b5cf6);">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div>
+                            <div class="skill-divider divider-frontend"></div>
+                            <span class="skills-section-label">User Interfaces</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-cards-grid">
+
+                        <!-- HTML -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="150">
+                            <div class="skill-card-icon icon-bg-html">
+                                <i class="devicon-html5-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">HTML5</div>
+                                <div class="skill-card-desc">Markup Language</div>
+                            </div>
+                        </div>
+
+                        <!-- CSS -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="180">
+                            <div class="skill-card-icon icon-bg-css">
+                                <i class="devicon-css3-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">CSS3</div>
+                                <div class="skill-card-desc">Style Sheet Language</div>
+                            </div>
+                        </div>
+
+                        <!-- JavaScript -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="210">
+                            <div class="skill-card-icon icon-bg-js">
+                                <i class="devicon-javascript-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">JavaScript</div>
+                                <div class="skill-card-desc">Web Scripting Language</div>
+                            </div>
+                        </div>
+
+                        <!-- TypeScript -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="240">
+                            <div class="skill-card-icon icon-bg-ts">
+                                <i class="devicon-typescript-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">TypeScript</div>
+                                <div class="skill-card-desc">Typed JavaScript</div>
+                            </div>
+                        </div>
+
+                        <!-- React -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="270">
+                            <div class="skill-card-icon icon-bg-react">
+                                <i class="devicon-react-original colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">React.js</div>
+                                <div class="skill-card-desc">Frontend UI Library</div>
+                            </div>
+                        </div>
+
+                        <!-- React Native -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="300">
+                            <div class="skill-card-icon icon-bg-native">
+                                <i class="devicon-react-original" style="color:#61dafb;"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">React Native</div>
+                                <div class="skill-card-desc">Mobile App Framework</div>
+                            </div>
+                        </div>
+
+                        <!-- Tailwind CSS -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="330" style="grid-column: span 2;">
+                            <div class="skill-card-icon icon-bg-tailwind">
+                                <i class="devicon-tailwindcss-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">Tailwind CSS</div>
+                                <div class="skill-card-desc">Utility-First CSS Framework</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ===== BACKEND ===== -->
+                <div class="skills-category-wrapper cat-backend" data-aos="fade-up" data-aos-delay="200">
+                    <span class="category-badge badge-backend">
+                        <i class="fas fa-server" style="font-size:0.6rem;"></i> Backend
+                    </span>
+                    <div class="skills-section-title">
+                        <div class="skills-section-icon" style="background: linear-gradient(135deg,#10b981,#059669);">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div>
+                            <div class="skill-divider divider-backend"></div>
+                            <span class="skills-section-label">Server & APIs</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-cards-grid">
+
+                        <!-- Node.js -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="250">
+                            <div class="skill-card-icon icon-bg-node">
+                                <i class="devicon-nodejs-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">Node.js</div>
+                                <div class="skill-card-desc">JS Runtime Environment</div>
+                            </div>
+                        </div>
+
+                        <!-- PHP -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="280">
+                            <div class="skill-card-icon icon-bg-php">
+                                <i class="devicon-php-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">PHP</div>
+                                <div class="skill-card-desc">Server-Side Scripting</div>
+                            </div>
+                        </div>
+
+                        <!-- Laravel -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="310">
+                            <div class="skill-card-icon icon-bg-laravel">
+                                <i class="devicon-laravel-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">Laravel</div>
+                                <div class="skill-card-desc">PHP Web Framework</div>
+                            </div>
+                        </div>
+
+                        <!-- Symfony -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="340">
+                            <div class="skill-card-icon icon-bg-symfony">
+                                <i class="devicon-symfony-original" style="color:#f0f0f0;"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">Symfony</div>
+                                <div class="skill-card-desc">PHP Framework</div>
+                            </div>
+                        </div>
+
+                        <!-- Express -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="370" style="grid-column: span 2;">
+                            <div class="skill-card-icon icon-bg-express">
+                                <i class="devicon-express-original" style="color:#f0f0f0;"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">Express.js</div>
+                                <div class="skill-card-desc">Node.js Web Framework</div>
+                            </div>
+                        </div>
+
+                    </div>  
+                </div>
+
+                <!-- ===== DATABASE & TOOLS ===== -->
+                <div class="skills-category-wrapper cat-database" data-aos="fade-up" data-aos-delay="300">
+                    <span class="category-badge badge-database">
+                        <i class="fas fa-database" style="font-size:0.6rem;"></i> Database & Tools
+                    </span>
+                    <div class="skills-section-title">
+                        <div class="skills-section-icon" style="background: linear-gradient(135deg,#f59e0b,#d97706);">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div>
+                            <div class="skill-divider divider-database"></div>
+                            <span class="skills-section-label">Data & DevOps</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-cards-grid">
+
+                          <div class="skill-card" data-aos="zoom-in" data-aos-delay="370">
+                           <div class="skill-card-icon icon-bg-python">
+                                 <i class="devicon-python-plain colored"></i>
+                           </div>
+                        <div class="skill-card-text">
+                            <div class="skill-card-name">Python</div>
+                            <div class="skill-card-desc">Backend & Scripting</div>
+                        </div>
+                          </div>
+
+                        <!-- MongoDB -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="350">
+                            <div class="skill-card-icon icon-bg-mongo">
+                                <i class="devicon-mongodb-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">MongoDB</div>
+                                <div class="skill-card-desc">NoSQL Database</div>
+                            </div>
+                        </div>
+
+                        <!-- MySQL -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="380">
+                            <div class="skill-card-icon icon-bg-mysql">
+                                <i class="devicon-mysql-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">MySQL</div>
+                                <div class="skill-card-desc">Relational Database</div>
+                            </div>
+                        </div>
+
+                        <!-- Git -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="410">
+                            <div class="skill-card-icon icon-bg-git">
+                                <i class="devicon-git-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">Git</div>
+                                <div class="skill-card-desc">Version Control</div>
+                            </div>
+                        </div>
+
+                        <!-- GitHub -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="430">
+                            <div class="skill-card-icon icon-bg-github">
+                                <i class="devicon-github-original" style="color:#f0f0f0;"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">GitHub</div>
+                                <div class="skill-card-desc">Code Hosting Platform</div>
+                            </div>
+                        </div>
+
+                        <!-- Docker -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="450">
+                            <div class="skill-card-icon icon-bg-docker">
+                                <i class="devicon-docker-plain colored"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">Docker</div>
+                                <div class="skill-card-desc">Containerization</div>
+                            </div>
+                        </div>
+
+                        <!-- Linux -->
+                        <div class="skill-card" data-aos="zoom-in" data-aos-delay="330" style="grid-column: span 2;">   
+                            <div class="skill-card-icon icon-bg-linux">
+                                <i class="devicon-linux-plain" style="color:#ffd700;"></i>
+                            </div>
+                            <div class="skill-card-text">
+                                <div class="skill-card-name">Linux</div>
+                                <div class="skill-card-desc">OS & Shell Scripting</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div><!-- end skills-main-grid -->
+
+            <!-- CTA Buttons -->
+            <div class="text-center mt-20" data-aos="fade-up" data-aos-delay="500">
                 <div class="flex flex-wrap justify-center gap-8">
-                    <a href="about.html" class="liquid-btn gradient-accent text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-400 transform hover:scale-110">
+                    <a href="about.html"
+                       class="liquid-btn gradient-accent text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-400 transform hover:scale-110">
                         <i class="fas fa-user mr-2"></i>About Me
                     </a>
-                    <a href="projects.html" class="liquid-btn gradient-primary text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-400 transform hover:scale-110">
+                    <a href="projects.html"
+                       class="liquid-btn gradient-primary text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-400 transform hover:scale-110">
                         <i class="fas fa-briefcase mr-2"></i>View Projects
                     </a>
                 </div>
             </div>
+
         </div>
     </section>
 
+    <!-- Scripts -->
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/animations.js"></script>
     <script src="../assets/js/components.js"></script>
+
+    <script>
+        // Init AOS
+        AOS.init({ duration: 600, once: true, easing: 'ease-out-cubic' });
+
+        // Floating particles
+        (function() {
+            const container = document.getElementById('particles');
+            const colors = ['#6366f1','#8b5cf6','#3b82f6','#10b981','#f59e0b'];
+            for (let i = 0; i < 22; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 5 + 2;
+                p.style.cssText = `
+                    width: ${size}px; height: ${size}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    left: ${Math.random() * 100}%;
+                    animation-duration: ${Math.random() * 18 + 12}s;
+                    animation-delay: ${Math.random() * 10}s;
+                `;
+                container.appendChild(p);
+            }
+        })();
+
+        // Scroll progress
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            const bar = document.getElementById('scrollProgress');
+            if (bar) bar.style.width = scrolled + '%';
+        });
+    </script>
 </body>
 </html>
