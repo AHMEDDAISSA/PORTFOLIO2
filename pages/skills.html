@@ -31,23 +31,40 @@
     </button>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-dynamic backdrop-blur-lg border-b border-dynamic">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="text-2xl font-bold gradient-text-primary font-playfair">
-                    <a href="../index.html">
-                        <span style="font-style: italic; font-family: 'Playfair Display', serif;">AHMED AISSA</span>
-                    </a>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="about.html"   class="text-dynamic hover:text-blue-400 transition-colors">About</a>
-                    <a href="skills.html"  class="text-blue-400 font-semibold">Skills</a>
-                    <a href="projects.html" class="text-dynamic hover:text-blue-400 transition-colors">Projects</a>
-                    <a href="contact.html" class="text-dynamic hover:text-blue-400 transition-colors">Contact</a>
-                </div>
+   <nav class="fixed top-0 left-0 right-0 z-50 bg-dynamic backdrop-blur-lg border-b border-dynamic">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+            <div class="text-2xl font-bold gradient-text-primary font-playfair">
+                <a href="../index.html">
+                    <span style="font-style: italic; font-family: 'Playfair Display', serif;">AHMED AISSA</span>
+                </a>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8">
+                <a href="about.html" class="text-dynamic hover:text-blue-400 transition-colors">About</a>
+                <a href="skills.html" class="text-dynamic hover:text-blue-400 transition-colors">Skills</a>
+                <a href="projects.html" class="text-blue-400 font-semibold">Projects</a>
+                <a href="contact.html" class="text-dynamic hover:text-blue-400 transition-colors">Contact</a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-dynamic" id="mobileMenuBtn">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden" id="mobileMenu">
+            <div class="px-4 pt-2 pb-4 space-y-3 bg-dynamic border-t border-dynamic">
+                <a href="about.html" class="block text-dynamic hover:text-blue-400 transition-colors py-2">About</a>
+                <a href="skills.html" class="block text-dynamic hover:text-blue-400 transition-colors py-2">Skills</a>
+                <a href="projects.html" class="block text-blue-400 font-semibold py-2">Projects</a>
+                <a href="contact.html" class="block text-dynamic hover:text-blue-400 transition-colors py-2">Contact</a>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- ===== SKILLS SECTION ===== -->
     <section id="skills" class="py-24 relative min-h-screen pt-32">
