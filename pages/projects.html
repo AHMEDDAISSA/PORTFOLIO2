@@ -80,23 +80,40 @@
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-                <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="project-card" data-aos="fade-up" data-aos-delay="200" 
+                    onmouseenter="startCarousel(this)" 
+                    onmouseleave="stopCarousel(this)">
                     <div class="project-image-container">
                         <div class="loading-spinner" id="loading2"></div>
 
+                        <!-- Multiple images stacked, only first visible -->
                         <img src="../assets/images/school.png" 
-                             alt="Flutter E-Commerce Platform Screenshot" 
-                             class="project-image contain" 
-                             onload="handleImageLoad(this, 1)"
-                             onerror="handleImageError(this, 1)">
+                            alt="School Camp App Screenshot 1" 
+                            class="project-image contain carousel-image active-carousel"
+                            data-carousel-index="0">
+                        <img src="../assets/images/school2.png" 
+                            alt="School Camp App Screenshot 2" 
+                            class="project-image contain carousel-image"
+                            data-carousel-index="1">
+                        <img src="../assets/images/school3.png" 
+                            alt="School Camp App Screenshot 3" 
+                            class="project-image contain carousel-image"
+                            data-carousel-index="2">
+
+                        <!-- Carousel dots indicator -->
+                        <div class="carousel-dots">
+                            <span class="carousel-dot active" data-dot="0"></span>
+                            <span class="carousel-dot" data-dot="1"></span>
+                            <span class="carousel-dot" data-dot="2"></span>
+                        </div>
                         
                         <div class="project-image-placeholder" id="placeholder2">
                             <i class="fas fa-campground"></i>
                             <p class="font-semibold text-lg mb-2">Camp Material App</p>
                             <p class="text-sm opacity-75 mb-4">Mobile rental & purchase platform</p>
                             <div class="text-xs opacity-60">
-                                <p>Add your app screenshot</p>
-                                <code class="bg-black bg-opacity-30 px-2 py-1 rounded mt-2 inline-block">camp-app-screenshot.jpg</code>
+                                <p>Add your app screenshots</p>
+                                <code class="bg-black bg-opacity-30 px-2 py-1 rounded mt-2 inline-block">school.png, school2.png, school3.png</code>
                             </div>
                         </div> 
 
@@ -124,67 +141,83 @@
                         </div>
                         <div class="flex space-x-4">
                             <a href="https://github.com/AHMEDDAISSA/SCHOOL_CAMPP" target="_blank" 
-                               class="text-blue-400 hover:text-blue-300 font-semibold transition-all duration-300 hover:scale-105">
+                            class="text-blue-400 hover:text-blue-300 font-semibold transition-all duration-300 hover:scale-105">
                                 <i class="fab fa-github mr-2"></i>View Code
-                            </a>
-                            <a href="#" class="text-purple-400 hover:text-purple-300 font-semibold transition-all duration-300 hover:scale-105">
-                                <i class="fas fa-mobile-alt mr-2"></i>App Demo
                             </a>
                         </div>
                     </div>
                 </div>
 
                 
-                <!-- Project 1: Flutter E-Commerce Platform -->
-                <div class="project-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="project-image-container">
-                        <div class="loading-spinner" id="loading1"></div>
-                        
-                        <img src="../assets/images/flutter.jpeg" 
-                        alt="Flutter E-Commerce Platform Screenshot" 
-                        class="project-image contain" 
-                        onload="handleImageLoad(this, 1)"
-                        onerror="handleImageError(this, 1)">
-                        
-                        <div class="project-image-placeholder" id="placeholder1">
-                            <i class="fab fa-flutter"></i>
-                            <p class="font-semibold text-lg mb-2">Flutter E-Commerce</p>
-                            <p class="text-sm opacity-75 mb-4">Cross-platform mobile application</p>
-                            <div class="text-xs opacity-60">
-                                <p>Add your Flutter app screenshot</p>
-                                <code class="bg-black bg-opacity-30 px-2 py-1 rounded mt-2 inline-block">flutter.jpeg</code>
+                
+                           <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+                            <div class="project-image-container">
+                                <div class="loading-spinner" id="loading1"></div>
+
+                                <!-- Carousel images — NO onload/onerror handlers -->
+                                <img src="../assets/images/smartfight.png"
+                                    alt="SmartFight Screenshot 1"
+                                    class="project-image contain carousel-image active-carousel"
+                                    data-carousel-index="0">
+
+                                <img src="../assets/images/smartfight2.png"
+                                    alt="SmartFight Screenshot 2"
+                                    class="project-image contain carousel-image"
+                                    data-carousel-index="1">
+
+                                    <img src="../assets/images/smartfight3.png"
+                                    alt="SmartFight Screenshot 2"
+                                    class="project-image contain carousel-image"
+                                    data-carousel-index="2">
+
+                                <!-- Dots -->
+                                <div class="carousel-dots">
+                                    <span class="carousel-dot active" data-dot="0"></span>
+                                    <span class="carousel-dot" data-dot="1"></span>
+                                    <span class="carousel-dot" data-dot="2"></span>
+                                </div>
+
+                                <div class="project-image-placeholder" id="placeholder1">
+                                    <i class="fas fa-desktop"></i>
+                                    <p class="font-semibold text-lg mb-2">SmartFight</p>
+                                    <p class="text-sm opacity-75 mb-4">Desktop Application</p>
+                                    <div class="text-xs opacity-60">
+                                        <p>Add your SmartFight screenshots</p>
+                                        <code class="bg-black bg-opacity-30 px-2 py-1 rounded mt-2 inline-block">smartfight.png, smartfight2.png</code>
+                                    </div>
+                                </div>
+
+                                <div class="project-image-overlay">
+                                    <div class="project-image-overlay-content">
+                                        <i class="fas fa-desktop text-3xl mb-2"></i>
+                                        <p class="font-semibold text-lg">SmartFight</p>
+                                        <p class="text-sm opacity-90">Desktop Application</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-8 relative z-10">
+                                <h3 class="text-2xl font-bold mb-4 text-white">SmartFight</h3>
+                                <p class="text-gray-300 mb-6 leading-relaxed">
+                                    A feature-rich desktop application built with JavaFX, 
+                                    delivering a smooth and responsive user experience with 
+                                    modern UI components, intuitive navigation, and powerful 
+                                    functionality across all desktop platforms.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    <span class="project-tag px-3 py-1 rounded-full text-sm">JavaFX</span>
+                                    <span class="project-tag px-3 py-1 rounded-full text-sm">Java</span>
+                                    <span class="project-tag px-3 py-1 rounded-full text-sm">Desktop</span>
+                                    <span class="project-tag px-3 py-1 rounded-full text-sm">SQL</span>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <a href="https://github.com/AHMEDDAISSA/smartfight" target="_blank" 
+                                    class="text-blue-400 hover:text-blue-300 font-semibold transition-all duration-300 hover:scale-105">
+                                        <i class="fab fa-github mr-2"></i>View Code
+                                    </a>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="project-image-overlay">
-                            <div class="project-image-overlay-content">
-                                <i class="fas fa-mobile-alt text-3xl mb-2"></i>
-                                <p class="font-semibold text-lg">Flutter Application</p>
-                                <p class="text-sm opacity-90">Cross-Platform Mobile App</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-8 relative z-10">
-                        <h3 class="text-2xl font-bold mb-4 text-white">Flutter Quiz Application</h3>
-                        <p class="text-gray-300 mb-6 leading-relaxed">
-                            A comprehensive cross-platform mobile quiz application built with Flutter, 
-                            featuring real-time scoring, multiple quiz categories, and intuitive user experience 
-                            with beautiful animations and smooth navigation.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="project-tag px-3 py-1 rounded-full text-sm">Flutter</span>
-                            <span class="project-tag px-3 py-1 rounded-full text-sm">Dart</span>
-                            <span class="project-tag px-3 py-1 rounded-full text-sm">Firebase</span>
-                        </div>
-                        <!-- <div class="flex space-x-4">
-                            <a href="https://github.com/AHMEDDAISSA" target="_blank" 
-                               class="text-blue-400 hover:text-blue-300 font-semibold transition-all duration-300 hover:scale-105">
-                                <i class="fab fa-github mr-2"></i>View Code
-                            </a>
-                        </div> -->
-                    </div>
-                </div>
 
                 <!-- Project 2: School Camp Material App -->
                 
@@ -238,9 +271,9 @@
                                class="text-blue-400 hover:text-blue-300 font-semibold transition-all duration-300 hover:scale-105">
                                 <i class="fab fa-github mr-2"></i>View Code
                             </a>
-                            <a href="#" class="text-purple-400 hover:text-purple-300 font-semibold transition-all duration-300 hover:scale-105">
+                            <!-- <a href="#" class="text-purple-400 hover:text-purple-300 font-semibold transition-all duration-300 hover:scale-105">
                                 <i class="fas fa-external-link-alt mr-2"></i>Live Demo
-                            </a>
+                            </a> -->
                         </div>
                     </div>
                 </div>

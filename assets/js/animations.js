@@ -135,3 +135,59 @@ const socialIconsObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.social-icons, .footer-social-icons').forEach(container => {
     socialIconsObserver.observe(container);
 });
+
+const carouselState = new WeakMap();
+
+function getCarouselState(card) {
+  if (!carouselState.has(card)) {
+    const images = Array.from(card.querySelectorAll(".carousel-image"));
+    const dots = Array.from(card.querySelectorAll(".carousel-dot"));
+    carouselState.set(card, { images, dots, index: 0, timer: null });
+  }
+  return carouselState.get(card);
+}
+
+function setActiveSlide(card, index) {
+  const state = getCarouselState(card);
+  const { images, dots } = state;
+
+  images.forEach((img, i) => img.classList.toggle("active-carousel", i === index));
+  dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+
+  state.index = index;
+}
+
+function nextSlide(card) {
+  const state = getCarouselState(card);
+  const nextIndex = (state.index + 1) % state.images.length;
+  setActiveSlide(card, nextIndex);
+}
+
+function startCarousel(card) {
+  const state = getCarouselState(card);
+
+  // show a new image immediately on hover
+  nextSlide(card);
+
+  // prevent multiple intervals stacking
+  if (state.timer) return;
+
+  state.timer = setInterval(() => nextSlide(card), 1800);
+}
+
+function stopCarousel(card) {
+  const state = getCarouselState(card);
+  clearInterval(state.timer);
+  state.timer = null;
+
+  // Optional: reset to first image when leaving
+  // setActiveSlide(card, 0);
+}
+
+document.querySelectorAll(".project-card").forEach(card => {
+  const images = card.querySelectorAll(".carousel-image");
+  if (images.length <= 1) return;         
+
+  card.addEventListener("mouseenter", () => startCarousel(card));
+  card.addEventListener("mouseleave", () => stopCarousel(card));
+});
