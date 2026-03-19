@@ -1,96 +1,90 @@
-// ============================================================
-//  proxy.js — Serveur proxy Gemini pour ton portfolio
-//  Node.js pur, aucune dépendance npm requise
-//
-//  DÉMARRAGE LOCAL :
-//    1. node proxy.js
-//    2. Ouvre ton portfolio normalement dans le navigateur
-//
-//  HÉBERGEMENT GRATUIT (Railway / Render) :
-//    - Push ce fichier + package.json sur GitHub
-//    - Connecte le repo sur railway.app ou render.com
-//    - Ajoute la variable d'env GEMINI_API_KEY
-//    - Remplace PROXY_URL dans chatbot.js par l'URL fournie
-// ============================================================
+// proxy.js — Gemini proxy pour portfolio (Railway / Render)
+// Aucune dépendance npm — Node.js pur
 
 const http  = require("http");
 const https = require("https");
 
-// ── CONFIG ──────────────────────────────────────────────────
-const PORT          = process.env.PORT || 3001;
+const PORT           = process.env.PORT || 3001;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "YOUR_GEMINI_API_KEY";
-const GEMINI_MODEL  = "gemini-2.0-flash";
-
-// Origines autorisées (ajoute ton domaine en prod)
-const ALLOWED_ORIGINS = [
-  "http://localhost",
-  "http://127.0.0.1",
-  "null", // file:// ouvert localement
-];
-// ────────────────────────────────────────────────────────────
-
-function isAllowed(origin) {
-  if (!origin) return true;
-  return ALLOWED_ORIGINS.some(o => origin.startsWith(o));
-}
+const GEMINI_MODEL   = "gemini-2.0-flash";
 
 const server = http.createServer((req, res) => {
-  const origin = req.headers.origin || "";
 
-  // CORS headers
-  res.setHeader("Access-Control-Allow-Origin",  isAllowed(origin) ? (origin || "*") : "null");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  // ── CORS : autorise toutes les origines ────────────────
+  res.setHeader("Access-Control-Allow-Origin",  "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") { res.writeHead(204); return res.end(); }
+  // Preflight
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    return res.end();
+  }
 
+  // Health check — vérifie que le proxy tourne
+  if (req.method === "GET" && req.url === "/") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ status: "ok", message: "Proxy Gemini actif ✓" }));
+  }
+
+  // ── Route principale ───────────────────────────────────
   if (req.method === "POST" && req.url === "/chat") {
     let body = "";
     req.on("data", chunk => body += chunk);
     req.on("end", () => {
+
       let payload;
-      try { payload = JSON.parse(body); }
-      catch { res.writeHead(400); return res.end(JSON.stringify({ error: "Invalid JSON" })); }
+      try {
+        payload = JSON.parse(body);
+      } catch {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "JSON invalide" }));
+      }
 
       const geminiBody = JSON.stringify({
-        system_instruction: { parts: [{ text: payload.system }] },
-        contents: payload.history,
+        system_instruction: { parts: [{ text: payload.system || "" }] },
+        contents: payload.history || [],
         generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
       });
 
       const options = {
         hostname: "generativelanguage.googleapis.com",
-        path: `/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(geminiBody) }
+        path:     `/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+        method:   "POST",
+        headers: {
+          "Content-Type":   "application/json",
+          "Content-Length": Buffer.byteLength(geminiBody)
+        }
       };
 
-      const geminiReq = https.request(options, geminiRes => {
+      const gReq = https.request(options, gRes => {
         let data = "";
-        geminiRes.on("data", c => data += c);
-        geminiRes.on("end", () => {
-          res.writeHead(geminiRes.statusCode, { "Content-Type": "application/json" });
+        gRes.on("data", c => data += c);
+        gRes.on("end", () => {
+          res.writeHead(gRes.statusCode, { "Content-Type": "application/json" });
           res.end(data);
         });
       });
 
-      geminiReq.on("error", err => {
-        res.writeHead(500);
+      gReq.on("error", err => {
+        console.error("Gemini error:", err.message);
+        res.writeHead(500, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: err.message }));
       });
 
-      geminiReq.write(geminiBody);
-      geminiReq.end();
+      gReq.write(geminiBody);
+      gReq.end();
     });
     return;
   }
 
-  res.writeHead(404);
-  res.end(JSON.stringify({ error: "Not found" }));
+  res.writeHead(404, { "Content-Type": "application/json" });
+  res.end(JSON.stringify({ error: "Route non trouvée" }));
 });
 
 server.listen(PORT, () => {
-  console.log(`\n✅ Proxy Gemini démarré sur http://localhost:${PORT}`);
-  console.log(`   → Endpoint : http://localhost:${PORT}/chat`);
-  console.log(`   → Clé API  : ${GEMINI_API_KEY === "YOUR_GEMINI_API_KEY" ? "⚠️  NON CONFIGURÉE" : "✓ configurée"}\n`);
+  console.log(`\n✅  Proxy Gemini actif → http://localhost:${PORT}`);
+  console.log(`    /        → health check`);
+  console.log(`    /chat    → endpoint chatbot`);
+  console.log(`    Clé API  : ${GEMINI_API_KEY === "YOUR_GEMINI_API_KEY" ? "⚠️  NON CONFIGURÉE" : "✓ OK"}\n`);
 });
