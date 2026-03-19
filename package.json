@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-chatbot-proxy",
+  "version": "1.0.0",
+  "description": "Proxy Gemini pour portfolio",
+  "main": "proxy.js",
+  "scripts": {
+    "start": "node proxy.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
