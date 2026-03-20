@@ -1,7 +1,12 @@
 {
-  "name": "portfolio-chatbot-proxy",
+  "name": "portfolio-proxy",
   "version": "1.0.0",
   "main": "proxy.js",
-  "scripts": { "start": "node proxy.js" },
-  "engines": { "node": ">=18" }
+  "scripts": {
+    "start": "node proxy.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
 }
