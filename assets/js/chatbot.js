@@ -21,7 +21,7 @@ Règles :
 
   const SUGGESTIONS = ["Qui es-tu ?", "Tes projets", "Tes compétences", "Te contacter"];
   const BOT_NAME    = "Assistant Portfolio";
-  const BOT_SUB     = "Propulsé par Gemini AI";
+  const BOT_SUB     = "Propulsé par Groq AI";
 
   const style = document.createElement("style");
   style.textContent = `
