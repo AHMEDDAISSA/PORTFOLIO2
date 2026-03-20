@@ -2,16 +2,23 @@ const express = require("express");
 const cors    = require("cors");
 
 const app = express();
-app.use(cors());
+
+// ✅ Fix CORS — autorise toutes les origines (localhost + production)
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+app.options("*", cors()); // Répondre aux preflight OPTIONS
+
 app.use(express.json());
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY; // À ajouter dans les variables Railway
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 app.post("/chat", async (req, res) => {
   try {
     const { system, history } = req.body;
 
-    // Convertir l'historique Gemini → format OpenAI/Groq
     const messages = [
       { role: "system", content: system ?? "" },
       ...(history || []).map(m => ({
@@ -27,7 +34,7 @@ app.post("/chat", async (req, res) => {
         "Authorization": `Bearer ${GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model:      "llama3-8b-8192", // Rapide et gratuit
+        model:      "llama3-8b-8192",
         max_tokens: 300,
         messages
       })
@@ -41,7 +48,6 @@ app.post("/chat", async (req, res) => {
     const data  = await response.json();
     const reply = data.choices?.[0]?.message?.content ?? "Je n'ai pas pu répondre.";
 
-    // Même format de réponse qu'avant → chatbot.js ne change pas
     res.json({
       candidates: [{ content: { parts: [{ text: reply }] } }]
     });
