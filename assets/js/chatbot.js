@@ -1,32 +1,25 @@
-// ============================================================
-//  PORTFOLIO CHATBOT — chatbot.js
-//  Propulsé par Gemini Flash via proxy Railway (gratuit)
-//  Copie dans assets/js/ et ajoute avant </body> :
-//  <script src="assets/js/chatbot.js"></script>
-// ============================================================
-
 (function () {
 
-  // ── ⚙️  CONFIG — MODIFIE CES VALEURS ────────────────────
-  // ⚠️  IMPORTANT : l'URL doit se terminer par /chat
+  
   const PROXY_URL = "https://portfolio2-production-c0ad.up.railway.app/chat";
 
-  const SYSTEM_PROMPT = `Tu es l'assistant IA du portfolio de [TON PRÉNOM NOM], [TON MÉTIER].
+  const SYSTEM_PROMPT = `Tu es l'assistant IA du portfolio de Ahmed Aissa, développeur full-stack.
 Tu réponds en français par défaut, sauf si l'utilisateur écrit dans une autre langue.
 Tu es concis, amical et professionnel. Tes réponses font maximum 3 phrases.
 
 Infos sur le propriétaire :
-- Nom : [TON PRÉNOM NOM]
-- Métier : [ex: Développeur Full-Stack]
-- Compétences : [ex: HTML, CSS, JavaScript, React, Node.js]
-- Projets : [ex: Portfolio personnel, App de gestion de tâches, API REST]
-- Contact : [ex: ton@email.com ou linkedin.com/in/tonprofil]
-- Disponibilité : [ex: Disponible pour des missions freelance]
+- Nom : Ahmed Aissa
+- Métier : Développeur Full-Stack
+- Compétences : HTML, CSS, JavaScript, React, Node.js
+- Projets : Portfolio personnel, app de gestion de tâches, API REST
+- Contact : ahmed@email.com, linkedin.com/in/ahmed
+- Disponibilité : Disponible pour des missions freelance
 
 Règles :
-- Réponds uniquement sur ces sujets (portfolio, compétences, projets, contact).
+- Réponds uniquement sur ces sujets : portfolio, compétences, projets, contact.
 - Si la question n'est pas liée, redirige poliment.
 - Ne génère jamais d'informations inventées.`;
+
 
   const SUGGESTIONS = ["Qui es-tu ?", "Tes projets", "Tes compétences", "Te contacter"];
   const BOT_NAME    = "Assistant Portfolio";
@@ -202,27 +195,22 @@ Règles :
     scrollBottom();
   }
 
-  async function callProxy(userText) {
-    history.push({ role: "user", parts: [{ text: userText }] });
-
-    const res = await fetch(PROXY_URL, {
+  async function callProxy(message) {
+  try {
+    const response = await fetch("https://portfolio2-production-0ad.up.railway.app/chatbot", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ system: SYSTEM_PROMPT, history })
+      body: JSON.stringify({ message }),
+      headers: { "Content-Type": "application/json" }
     });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
     }
-
-    const data  = await res.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text
-      ?? "Je n'ai pas pu générer de réponse.";
-
-    history.push({ role: "model", parts: [{ text: reply }] });
-    return reply;
+    return await response.json();
+  } catch (error) {
+    showMessage("Assistant indisponible pour le moment. Réessaie plus tard.");
   }
+}
+
 
   async function sendMsg() {
     const text = ta.value.trim();
@@ -244,8 +232,8 @@ Règles :
       msgs.appendChild(mkMsg("bot", reply));
       scrollBottom();
     } catch (err) {
-      console.error("[Chatbot]", err);
-      showError("Oups, une erreur est survenue. Réessaie dans un instant.");
+    console.error("[Chatbot]", err.message || err);
+    showError("Oups, une erreur est survenue. Réessaie dans un instant.");
     } finally {
       isLoading     = false;
       send.disabled = ta.value.trim().length === 0;

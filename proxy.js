@@ -11,9 +11,10 @@ const GEMINI_MODEL   = "gemini-2.0-flash";
 const server = http.createServer((req, res) => {
 
   // ── CORS : autorise toutes les origines ────────────────
-  res.setHeader("Access-Control-Allow-Origin",  "*");
+  res.setHeader("Access-Control-Allow-Origin",  req.headers.origin || "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   // Preflight
   if (req.method === "OPTIONS") {
@@ -21,14 +22,14 @@ const server = http.createServer((req, res) => {
     return res.end();
   }
 
-  // Health check — vérifie que le proxy tourne
-  if (req.method === "GET" && req.url === "/") {
+  // Health check — toute requête GET
+  if (req.method === "GET") {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(JSON.stringify({ status: "ok", message: "Proxy Gemini actif ✓" }));
   }
 
-  // ── Route principale ───────────────────────────────────
-  if (req.method === "POST" && req.url === "/chat") {
+  // ── Route principale — toute requête POST ──────────────
+  if (req.method === "POST") {
     let body = "";
     req.on("data", chunk => body += chunk);
     req.on("end", () => {
