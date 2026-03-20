@@ -25,7 +25,7 @@ Règles :
 
   const style = document.createElement("style");
   style.textContent = `
-    #cb-toggle{position:fixed;bottom:1.75rem;right:1.75rem;width:54px;height:54px;border-radius:50%;background:#7f77dd;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:9999;transition:transform .2s,box-shadow .2s;box-shadow:0 0 0 0 rgba(127,119,221,.3)}
+    #cb-spin{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}} #cb-toggle{position:fixed;bottom:1.75rem;right:1.75rem;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#6366f1,#3b82f6,#8b5cf6);background-size:300% 300%;animation:cb-spin 4s ease infinite;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:9999;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(99,102,241,.5)}
     #cb-toggle:hover{transform:scale(1.07);box-shadow:0 0 0 8px rgba(127,119,221,.2)}
     #cb-toggle .ico-open{display:flex}#cb-toggle .ico-close{display:none}
     #cb-toggle.cb-open .ico-open{display:none}#cb-toggle.cb-open .ico-close{display:flex}
@@ -59,15 +59,29 @@ Règles :
     .cb-send{width:34px;height:34px;border-radius:7px;background:#7f77dd;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s,transform .15s}
     .cb-send:hover{opacity:.82;transform:scale(1.04)}.cb-send:disabled{opacity:.35;cursor:not-allowed;transform:none}
     .cb-err{background:rgba(226,75,74,.1);border:1px solid rgba(226,75,74,.3);color:#f09595;padding:7px 11px;border-radius:8px;font-size:12px;text-align:center}
-    @media(max-width:480px){#cb-window{width:calc(100vw - 2rem);right:1rem}#cb-toggle{bottom:1.25rem;right:1.25rem}}
+    @media(max-width:768px){#cb-toggle{bottom:1.25rem;right:auto;left:1rem}#cb-window{right:auto;left:1rem;width:calc(100vw - 2rem);transform-origin:bottom left}}
+@media(max-width:480px){#cb-window{width:calc(100vw - 1.5rem);max-height:65vh;border-radius:14px}}
   `;
   document.head.appendChild(style);
 
   const wrap = document.createElement("div");
   wrap.innerHTML = `
     <button id="cb-toggle" aria-label="Ouvrir le chat" aria-expanded="false">
-      <span class="ico-open"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-      <span class="ico-close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+     <span class="ico-open">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="8" width="18" height="13" rx="3"/>
+    <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+    <circle cx="9" cy="14" r="1.5" fill="white"/>
+    <circle cx="15" cy="14" r="1.5" fill="white"/>
+    <path d="M9 18h6"/>
+    <line x1="12" y1="3" x2="12" y2="4"/>
+  </svg>
+</span>
+      <span class="ico-close">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+</span>
     </button>
     <div id="cb-window" role="dialog">
       <div class="cb-head">
@@ -155,29 +169,19 @@ Règles :
     buildSuggestions(); scrollBottom();
   }
 
- async function callProxy(userText) {
-  history.push({ role: "user", parts: [{ text: userText }] });
-
-  // IMPORTANT: limite côté client aussi
-  const trimmedHistory = history.slice(-10);
-
-  const res = await fetch(PROXY_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ system: SYSTEM_PROMPT, history: trimmedHistory })
-  });
-
-  if (!res.ok) {
-    if (res.status === 429) throw new Error("RATE_LIMIT");
-    throw new Error("HTTP " + res.status);
+  async function callProxy(userText) {
+    history.push({ role: "user", parts: [{ text: userText }] });
+    const res = await fetch(PROXY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, history })
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Je n'ai pas pu répondre.";
+    history.push({ role: "model", parts: [{ text: reply }] });
+    return reply;
   }
-
-  const data = await res.json();
-  const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Je n'ai pas pu répondre.";
-  history.push({ role: "model", parts: [{ text: reply }] });
-  return reply;
-}
-
 
   async function sendMsg() {
     const text = ta.value.trim();
@@ -189,13 +193,11 @@ Règles :
       const reply = await callProxy(text);
       removeTyping(); msgs.appendChild(mkMsg("bot", reply)); scrollBottom();
     } catch (err) {
-  console.error("[Chatbot]", err);
-  if (err.message === "RATE_LIMIT") {
-    showError("Je reçois beaucoup de demandes en ce moment. Réessaie dans 10–20 secondes.");
-  } else {
-    showError("Oups, une erreur est survenue. Réessaie dans un instant.");
-  }
-}
+      console.error("[Chatbot]", err);
+      showError("Oups, une erreur est survenue. Réessaie dans un instant.");
+    } finally {
+      isLoading = false; send.disabled = ta.value.trim().length === 0;
+    }
   }
 
   ta.addEventListener("input", function () {
