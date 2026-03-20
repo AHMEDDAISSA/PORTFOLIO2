@@ -3,21 +3,27 @@ const cors    = require("cors");
 
 const app = express();
 
-// ✅ Fix CORS — autorise toutes les origines (localhost + production)
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.options("*", cors()); // Répondre aux preflight OPTIONS
-
+app.options("*", cors());
 app.use(express.json());
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 app.post("/chat", async (req, res) => {
   try {
+    // ✅ Debug : vérifier que la clé existe
+    if (!GROQ_API_KEY) {
+      console.error("❌ GROQ_API_KEY manquante !");
+      return res.status(500).json({ error: "GROQ_API_KEY non configurée" });
+    }
+
     const { system, history } = req.body;
+
+    console.log("📩 Body reçu:", JSON.stringify({ system: system?.slice(0, 50), historyLength: history?.length }));
 
     const messages = [
       { role: "system", content: system ?? "" },
@@ -40,12 +46,14 @@ app.post("/chat", async (req, res) => {
       })
     });
 
+    const data = await response.json();
+    console.log("📤 Réponse Groq status:", response.status);
+
     if (!response.ok) {
-      const err = await response.text();
-      return res.status(response.status).json({ error: err });
+      console.error("❌ Erreur Groq:", JSON.stringify(data));
+      return res.status(response.status).json({ error: data });
     }
 
-    const data  = await response.json();
     const reply = data.choices?.[0]?.message?.content ?? "Je n'ai pas pu répondre.";
 
     res.json({
@@ -53,10 +61,10 @@ app.post("/chat", async (req, res) => {
     });
 
   } catch (err) {
-    console.error("[Proxy Groq]", err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error("❌ Erreur serveur:", err.message);
+    res.status(500).json({ error: "Erreur serveur: " + err.message });
   }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Proxy Groq démarré sur le port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Proxy Groq démarré sur le port ${PORT}`));
