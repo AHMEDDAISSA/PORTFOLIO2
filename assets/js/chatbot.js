@@ -1,7 +1,7 @@
 (function () {
 
   
-  const PROXY_URL = "https://portfolio2-production-c0ad.up.railway.app/chat";
+  const PROXY_URL =  "https://portfolio2-production-c0ad.up.railway.app/chat";
 
   const SYSTEM_PROMPT = `Tu es l'assistant IA du portfolio de Ahmed Aissa, développeur full-stack.
 Tu réponds en français par défaut, sauf si l'utilisateur écrit dans une autre langue.
