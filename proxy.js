@@ -1,91 +1,43 @@
-// proxy.js — Gemini proxy pour portfolio (Railway / Render)
-// Aucune dépendance npm — Node.js pur
-
 const http  = require("http");
 const https = require("https");
-
 const PORT           = process.env.PORT || 3001;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "YOUR_GEMINI_API_KEY";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const GEMINI_MODEL   = "gemini-2.0-flash";
-
 const server = http.createServer((req, res) => {
-
-  // ── CORS : autorise toutes les origines ────────────────
-  res.setHeader("Access-Control-Allow-Origin",  req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  // Preflight
-  if (req.method === "OPTIONS") {
-    res.writeHead(204);
-    return res.end();
-  }
-
-  // Health check — toute requête GET
+  if (req.method === "OPTIONS") { res.writeHead(204); return res.end(); }
   if (req.method === "GET") {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ status: "ok", message: "Proxy Gemini actif ✓" }));
+    res.writeHead(200, {"Content-Type":"application/json"});
+    return res.end(JSON.stringify({status:"ok"}));
   }
-
-  // ── Route principale — toute requête POST ──────────────
   if (req.method === "POST") {
     let body = "";
-    req.on("data", chunk => body += chunk);
+    req.on("data", c => body += c);
     req.on("end", () => {
-
       let payload;
-      try {
-        payload = JSON.parse(body);
-      } catch {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ error: "JSON invalide" }));
-      }
-
-      const geminiBody = JSON.stringify({
-        system_instruction: { parts: [{ text: payload.system || "" }] },
-        contents: payload.history || [],
-        generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
+      try { payload = JSON.parse(body); } catch { res.writeHead(400); return res.end('{"error":"bad json"}'); }
+      const gb = JSON.stringify({
+        system_instruction: {parts:[{text: payload.system||""}]},
+        contents: payload.history||[],
+        generationConfig: {maxOutputTokens:300, temperature:0.7}
       });
-
-      const options = {
+      const opt = {
         hostname: "generativelanguage.googleapis.com",
-        path:     `/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
-        method:   "POST",
-        headers: {
-          "Content-Type":   "application/json",
-          "Content-Length": Buffer.byteLength(geminiBody)
-        }
+        path: `/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+        method: "POST",
+        headers: {"Content-Type":"application/json","Content-Length":Buffer.byteLength(gb)}
       };
-
-      const gReq = https.request(options, gRes => {
-        let data = "";
-        gRes.on("data", c => data += c);
-        gRes.on("end", () => {
-          res.writeHead(gRes.statusCode, { "Content-Type": "application/json" });
-          res.end(data);
-        });
+      const gr = https.request(opt, r => {
+        let d = ""; r.on("data", c => d+=c);
+        r.on("end", () => { res.writeHead(r.statusCode,{"Content-Type":"application/json"}); res.end(d); });
       });
-
-      gReq.on("error", err => {
-        console.error("Gemini error:", err.message);
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: err.message }));
-      });
-
-      gReq.write(geminiBody);
-      gReq.end();
+      gr.on("error", e => { res.writeHead(500); res.end(JSON.stringify({error:e.message})); });
+      gr.write(gb); gr.end();
     });
     return;
   }
-
-  res.writeHead(404, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ error: "Route non trouvée" }));
+  res.writeHead(404); res.end('{"error":"not found"}');
 });
-
-server.listen(PORT, () => {
-  console.log(`\n✅  Proxy Gemini actif → http://localhost:${PORT}`);
-  console.log(`    /        → health check`);
-  console.log(`    /chat    → endpoint chatbot`);
-  console.log(`    Clé API  : ${GEMINI_API_KEY === "YOUR_GEMINI_API_KEY" ? "⚠️  NON CONFIGURÉE" : "✓ OK"}\n`);
-});
+server.listen(PORT, () => console.log("Proxy actif sur port", PORT));
