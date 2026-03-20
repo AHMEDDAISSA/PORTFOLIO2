@@ -1,6 +1,5 @@
 (function () {
 
-  
   const PROXY_URL = "https://portfolio2-production-c0ad.up.railway.app/chat";
 
   const SYSTEM_PROMPT = `Tu es l'assistant IA du portfolio de Ahmed Aissa, développeur full-stack.
@@ -20,13 +19,10 @@ Règles :
 - Si la question n'est pas liée, redirige poliment.
 - Ne génère jamais d'informations inventées.`;
 
-
   const SUGGESTIONS = ["Qui es-tu ?", "Tes projets", "Tes compétences", "Te contacter"];
   const BOT_NAME    = "Assistant Portfolio";
   const BOT_SUB     = "Propulsé par Gemini AI";
-  // ─────────────────────────────────────────────────────────
 
-  // ── CSS ──────────────────────────────────────────────────
   const style = document.createElement("style");
   style.textContent = `
     #cb-toggle{position:fixed;bottom:1.75rem;right:1.75rem;width:54px;height:54px;border-radius:50%;background:#7f77dd;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:9999;transition:transform .2s,box-shadow .2s;box-shadow:0 0 0 0 rgba(127,119,221,.3)}
@@ -67,48 +63,29 @@ Règles :
   `;
   document.head.appendChild(style);
 
-  // ── HTML ─────────────────────────────────────────────────
   const wrap = document.createElement("div");
   wrap.innerHTML = `
     <button id="cb-toggle" aria-label="Ouvrir le chat" aria-expanded="false">
-      <span class="ico-open">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-      </span>
-      <span class="ico-close">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </span>
+      <span class="ico-open"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+      <span class="ico-close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
     </button>
-    <div id="cb-window" role="dialog" aria-label="${BOT_NAME}">
+    <div id="cb-window" role="dialog">
       <div class="cb-head">
-        <div class="cb-avatar">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7f77dd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-          </svg>
-        </div>
+        <div class="cb-avatar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7f77dd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
         <div class="cb-hinfo"><h3>${BOT_NAME}</h3><p>${BOT_SUB}</p></div>
         <div class="cb-dot"></div>
       </div>
       <div class="cb-msgs" id="cb-msgs"></div>
       <div class="cb-sugg" id="cb-sugg"></div>
       <div class="cb-foot">
-        <textarea class="cb-ta" id="cb-ta" placeholder="Pose ta question…" rows="1" maxlength="500" aria-label="Message"></textarea>
-        <button class="cb-send" id="cb-send" aria-label="Envoyer" disabled>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-          </svg>
-        </button>
+        <textarea class="cb-ta" id="cb-ta" placeholder="Pose ta question…" rows="1" maxlength="500"></textarea>
+        <button class="cb-send" id="cb-send" disabled><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
       </div>
     </div>`;
   document.body.appendChild(wrap);
 
-  // ── STATE ────────────────────────────────────────────────
   const history = [];
-  let isOpen    = false;
-  let isLoading = false;
+  let isOpen = false, isLoading = false;
 
   const toggle = document.getElementById("cb-toggle");
   const win    = document.getElementById("cb-window");
@@ -128,61 +105,45 @@ Règles :
     const bubble = document.createElement("div");
     bubble.className = "cb-bubble";
     bubble.textContent = text;
-    role === "bot"
-      ? (div.appendChild(mic), div.appendChild(bubble))
-      : (div.appendChild(bubble), div.appendChild(mic));
+    role === "bot" ? (div.appendChild(mic), div.appendChild(bubble)) : (div.appendChild(bubble), div.appendChild(mic));
     return div;
   }
 
   function showTyping() {
     const div = document.createElement("div");
-    div.className = "cb-msg cb-bot cb-typing";
-    div.id = "cb-typing";
-    const mic = document.createElement("div");
-    mic.className = "cb-mic"; mic.textContent = "AI";
-    const bubble = document.createElement("div");
-    bubble.className = "cb-bubble";
+    div.className = "cb-msg cb-bot cb-typing"; div.id = "cb-typing";
+    const mic = document.createElement("div"); mic.className = "cb-mic"; mic.textContent = "AI";
+    const bubble = document.createElement("div"); bubble.className = "cb-bubble";
     bubble.innerHTML = '<span class="cb-d"></span><span class="cb-d"></span><span class="cb-d"></span>';
-    div.appendChild(mic); div.appendChild(bubble);
-    msgs.appendChild(div);
-    scrollBottom();
+    div.appendChild(mic); div.appendChild(bubble); msgs.appendChild(div); scrollBottom();
   }
 
   function removeTyping() { document.getElementById("cb-typing")?.remove(); }
 
   function showError(msg) {
     removeTyping();
-    const div = document.createElement("div");
-    div.className = "cb-err";
-    div.textContent = msg;
-    msgs.appendChild(div);
-    scrollBottom();
+    const div = document.createElement("div"); div.className = "cb-err"; div.textContent = msg;
+    msgs.appendChild(div); scrollBottom();
   }
 
   function buildSuggestions() {
     sugg.innerHTML = "";
     SUGGESTIONS.forEach(s => {
-      const btn = document.createElement("button");
-      btn.className = "cb-sq";
-      btn.textContent = s;
+      const btn = document.createElement("button"); btn.className = "cb-sq"; btn.textContent = s;
       btn.onclick = () => { ta.value = s; send.disabled = false; sendMsg(); };
       sugg.appendChild(btn);
     });
   }
 
   function openChat() {
-    isOpen = true;
-    toggle.classList.add("cb-open");
-    win.classList.add("cb-open");
+    isOpen = true; toggle.classList.add("cb-open"); win.classList.add("cb-open");
     toggle.setAttribute("aria-expanded", "true");
     if (msgs.children.length === 0) greet();
     setTimeout(() => ta.focus(), 280);
   }
 
   function closeChat() {
-    isOpen = false;
-    toggle.classList.remove("cb-open");
-    win.classList.remove("cb-open");
+    isOpen = false; toggle.classList.remove("cb-open"); win.classList.remove("cb-open");
     toggle.setAttribute("aria-expanded", "false");
   }
 
@@ -191,65 +152,57 @@ Règles :
 
   function greet() {
     msgs.appendChild(mkMsg("bot", "Bonjour ! Je suis l'assistant IA de ce portfolio. Pose-moi une question sur les projets, compétences, ou pour prendre contact 👋"));
-    buildSuggestions();
-    scrollBottom();
+    buildSuggestions(); scrollBottom();
   }
 
-  async function callProxy(message) {
-  try {
-    const response = await fetch("https://portfolio2-production-0ad.up.railway.app/chatbot", {
-      method: "POST",
-      body: JSON.stringify({ message }),
-      headers: { "Content-Type": "application/json" }
-    });
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    showMessage("Assistant indisponible pour le moment. Réessaie plus tard.");
+ async function callProxy(userText) {
+  history.push({ role: "user", parts: [{ text: userText }] });
+
+  // IMPORTANT: limite côté client aussi
+  const trimmedHistory = history.slice(-10);
+
+  const res = await fetch(PROXY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ system: SYSTEM_PROMPT, history: trimmedHistory })
+  });
+
+  if (!res.ok) {
+    if (res.status === 429) throw new Error("RATE_LIMIT");
+    throw new Error("HTTP " + res.status);
   }
+
+  const data = await res.json();
+  const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Je n'ai pas pu répondre.";
+  history.push({ role: "model", parts: [{ text: reply }] });
+  return reply;
 }
 
 
   async function sendMsg() {
     const text = ta.value.trim();
     if (!text || isLoading) return;
-
-    sugg.innerHTML  = "";
-    ta.value        = "";
-    ta.style.height = "34px";
-    send.disabled   = true;
-    isLoading       = true;
-
-    msgs.appendChild(mkMsg("user", text));
-    scrollBottom();
-    showTyping();
-
+    sugg.innerHTML = ""; ta.value = ""; ta.style.height = "34px";
+    send.disabled = true; isLoading = true;
+    msgs.appendChild(mkMsg("user", text)); scrollBottom(); showTyping();
     try {
       const reply = await callProxy(text);
-      removeTyping();
-      msgs.appendChild(mkMsg("bot", reply));
-      scrollBottom();
+      removeTyping(); msgs.appendChild(mkMsg("bot", reply)); scrollBottom();
     } catch (err) {
-    console.error("[Chatbot]", err.message || err);
+  console.error("[Chatbot]", err);
+  if (err.message === "RATE_LIMIT") {
+    showError("Je reçois beaucoup de demandes en ce moment. Réessaie dans 10–20 secondes.");
+  } else {
     showError("Oups, une erreur est survenue. Réessaie dans un instant.");
-    } finally {
-      isLoading     = false;
-      send.disabled = ta.value.trim().length === 0;
-    }
+  }
+}
   }
 
   ta.addEventListener("input", function () {
-    this.style.height = "34px";
-    this.style.height = Math.min(this.scrollHeight, 90) + "px";
-    send.disabled     = this.value.trim().length === 0;
+    this.style.height = "34px"; this.style.height = Math.min(this.scrollHeight, 90) + "px";
+    send.disabled = this.value.trim().length === 0;
   });
-
-  ta.addEventListener("keydown", e => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (!send.disabled) sendMsg(); }
-  });
-
+  ta.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (!send.disabled) sendMsg(); } });
   send.addEventListener("click", sendMsg);
 
 })();
